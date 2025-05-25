@@ -31,7 +31,7 @@ const sanitizeOption = {
 
 export const getPostById = async (ctx, next) => {
   const { id } = ctx.params;
-  console.log(id);
+  // console.log(id);
 
   if (!ObjectId.isValid(id)) {
     ctx.status = 400; // Bad Request
