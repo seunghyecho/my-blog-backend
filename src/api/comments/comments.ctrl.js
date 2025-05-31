@@ -51,3 +51,52 @@ export const list = async (ctx) => {
         ctx.throw(500, e);
     }
 }
+
+export const remove = async (ctx)=>{
+    const {id} = ctx.params;
+    try{
+        await Comment.findByIdAndRemove(id).exec();
+        ctx.status = 204;
+    }catch(e){
+        ctx.throw(500,e);
+    }
+};
+
+export const update = async (ctx) => {
+    const { id } = ctx.params;
+    const schema = Joi.object().keys({
+        content: Joi.string().required(),
+        postId: Joi.string().required(),
+    });
+
+    const result = schema.validate({
+        ...ctx.request.body,
+    });
+
+    if (result.error) {
+        ctx.status = 400;
+        ctx.body = result.error;
+        return;
+    }
+    const { content, postId } = result.value;
+
+    try {
+        const comment = await Comment.findByIdAndUpdate(
+            id,  // URL에서 받은 comment의 id 사용
+            { content },  // 업데이트할 필드를 객체로 전달
+            {
+                new: true,
+            }
+        ).exec();
+        
+        if (!comment) {
+            ctx.status = 404;
+            ctx.body = { message: 'Comment not found' };
+            return;
+        }
+        
+        ctx.body = comment;
+    } catch (e) {
+        ctx.throw(500, e);
+    }
+}
