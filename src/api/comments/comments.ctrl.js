@@ -40,13 +40,11 @@ export const write = async (ctx) => {
 }
 
 export const list = async (ctx) => {
-    const { postId } = ctx.params;
+    const { id } = ctx.params;
     
     try {
         // 특정 포스트의 모든 댓글을 생성일 기준 내림차순으로 조회
-        const comments = await Comment.find({ postId })
-            .sort({ createdAt: -1 })
-            .exec();
+        const comments = await Comment.find({ postId:id }).sort({ createdAt: -1 }).exec();
             
         ctx.body = comments;
     } catch (e) {
