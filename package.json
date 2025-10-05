@@ -27,7 +27,8 @@
   },
   "scripts": {
     "start": "node src/index.js",
-    "start:dev": "nodemon --watch src/ src/index.js",
+    "start:dev": "NODE_ENV=development nodemon --watch src/ src/index.js",
+    "deploy:prod": "NODE_ENV=production vercel --prod",
     "build": "echo 'Nothing to build'"
   }
 }
