@@ -1,5 +1,5 @@
-import Joi from '@hapi/joi';
-import User from '../../models/user.js';
+import Joi from "@hapi/joi";
+import User from "../../models/user.js";
 
 /*
   POST /api/auth/register
@@ -39,7 +39,7 @@ export const register = async (ctx) => {
     ctx.body = user.serialize();
 
     const token = user.generateToken();
-    ctx.cookies.set('access_token', token, {
+    ctx.cookies.set("access_token", token, {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
       httpOnly: true,
     });
@@ -77,9 +77,12 @@ export const login = async (ctx) => {
       ctx.status = 401;
       return;
     }
-    ctx.body = user.serialize();
     const token = user.generateToken();
-    ctx.cookies.set('access_token', token, {
+    ctx.body = {
+      ...user.serialize(),
+      token,
+    };
+    ctx.cookies.set("access_token", token, {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
       httpOnly: true,
     });
@@ -105,6 +108,6 @@ export const check = async (ctx) => {
   POST /api/auth/logout
 */
 export const logout = async (ctx) => {
-  ctx.cookies.set('access_token');
+  ctx.cookies.set("access_token");
   ctx.status = 204; // No Content
 };
